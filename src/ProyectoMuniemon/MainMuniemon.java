@@ -6,64 +6,59 @@ public class MainMuniemon {
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		Muniemon muniemon1 = null;
-		Muniemon muniemon2 = null;
+		Muniemon[] muniemons = new Muniemon[2];	
 		
 		int opcion;
 		do {
 			System.out.println();
 			System.out.println("Menú de Muniemon:");
-			System.out.println("1. Dar de alta al primer Muniemon");
-			System.out.println("2. Dar de alta al segundo Muniemon");
-			System.out.println("3. Mostrar primer Muniemon");
-			System.out.println("4. Mostrar segundo Muniemon");
-			System.out.println("5. Atacar primer Muniemon a segundo Muniemon");
-			System.out.println("6. Atacar segundo Muniemon a primer Muniemon");
-			System.out.println("7. Salir del programa");
-			
+			System.out.println("1. Dar de alta a un Muniemon (maximo 2)");
+			System.out.println("2. Mostrar Muniemons");
+            System.out.println("3. Empezar combate");
+            System.out.println("4. Salir del programa");
+            System.out.println("Ingrese una opción:");			
 			opcion = Integer.parseInt(scanner.nextLine());
 			
 			
 			switch (opcion) {
 			
 			case 1:
-				muniemon1 = altaMuniemon(scanner);
-				System.out.println("Muniemon 1 creado correctamente.");
-				break;
+				System.out.println("Creando primer Muniemon...");
+                muniemons[0] = altaMuniemon(scanner);
+                System.out.println("Primer Muniemon creado correctamente.");
+                System.out.println("Creando segundo Muniemon...");
+                muniemons[1] = altaMuniemon(scanner);
+                System.out.println("Segundo Muniemon creado correctamente.");
+                break;
 				
 			case 2:
-				muniemon2 = altaMuniemon(scanner);
-				System.out.println("Muniemon 2 creado correctamente.");
+				for (Muniemon muniemon : muniemons) {
+					if (muniemon != null) {
+						System.out.println("Datos del muniemon");
+						muniemon.mostrarDatos();
+					}else {
+						System.out.println("No se han creado Muniemons aun");
+					}
+				}
 				break;
-				
 			case 3:
-				mostrarMuniemon(muniemon1);
+				if (muniemons[0] != null && muniemons[1] != null) {
+					Combate combate = new Combate(muniemons[0], muniemons[1]);
+					Muniemon ganador = combate.empezarCombate();
+					System.out.println("El Muniemon ganador es:" + ganador.nombre);
+				}else {
+					System.out.println("Debes crear ambos Muniemones antes de empezar a combatir");
+				}
 				break;
-				
 			case 4:
-				mostrarMuniemon(muniemon2);
+				System.out.println("Saliendo del programa...");
 				break;
 				
-			case 5: 
-				if (muniemon1 != null && muniemon2 != null) {
-					muniemon1.atacar(muniemon2);
-				}else {
-					System.out.println("Debes crear ambos Muniemones antes de atacar");
-				}
-				break;
-				
-			case 6: 
-				if (muniemon1 != null && muniemon2 != null) {
-					muniemon1.atacar(muniemon2);
-				}else {
-					System.out.println("Debes crear ambos Muniemones antes de atacar");
-				}
-				break;
 			default:
 				System.out.println("Opción inválida. Intente de nuevo.");
 				break;
 			}
-		} while (opcion != 7);
+		} while (opcion != 4);
 	}
 
 		public static Muniemon altaMuniemon(Scanner scanner) {
@@ -79,20 +74,13 @@ public class MainMuniemon {
 	        System.out.println("Ingrese la defensa del Muniemon:");
 	        int defensa = Integer.parseInt(scanner.nextLine());
 
-	        System.out.println("Ingrese el tipo del Muniemon (AGUA, TIERRA, FUEGO, PLANTA):");
+	        System.out.println("Ingrese el tipo del Muniemon (AGUA, FUEGO, PLANTA):");
 	        String tipoString = scanner.nextLine();
 	        TipoMuniemon tipoMuniemon = TipoMuniemon.valueOf(tipoString.toUpperCase());
+	        
+	        System.out.println("Ingrese la velocidad del Muniemon:");
+	        int velocidad = Integer.parseInt(scanner.nextLine());			
 
-	        return new Muniemon(nombre, vida, ataque, defensa, tipoMuniemon);
+	        return new Muniemon(nombre, vida, ataque, defensa, tipoMuniemon, velocidad);
 	    }
-		
-		public static void mostrarMuniemon(Muniemon muniemon) {
-			if (muniemon != null) {
-				System.out.println("Datos del Muniemon:");
-				muniemon.mostrarDatos();
-			}
-			else {
-				System.out.println("No se ha creado el Muniemon aun");
-			}
-		}
 }
